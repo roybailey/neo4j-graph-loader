@@ -1,0 +1,94 @@
+{
+  "name": "neo4j-graph-loader",
+  "version": "0.1.0",
+  "description": "Server to convert generic graph in JSON or CSV format into Cypher create script",
+  "main": "server.js",
+  "scripts": {
+    "docker": "docker build -t roybaileybiz/neo4j-graph-loader .",
+    "build": "npm run build-ts && npm run lint",
+    "build-ts": "tsc",
+    "watch-ts": "tsc -w",
+    "start": "npm run server",
+    "server": "node dist/server.js",
+    "dev": "ts-node src/server.ts",
+    "test": "npx jest",
+    "lint": "tsc --noEmit && eslint \"**/*.{js,ts}\" --quiet --fix",
+    "graph": "ts-node src/graph/graph.ts",
+    "load-graph": "ts-node src/graph/load-graph.ts",
+    "load-habits": "ts-node src/graph/load-habits.ts"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:roybailey/neo4j-graph-loader.git"
+  },
+  "author": "Roy Bailey",
+  "license": "MIT",
+  "homepage": "https://github.com/roybailey/neo4j-graph-loader#readme",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "csv": "^5.3.1",
+    "dotenv": "^8.2.0",
+    "errorhandler": "^1.5.1",
+    "express": "^4.17.1",
+    "minimist": "^1.2.0",
+    "neo4j-driver": "^4.0.1",
+    "winston": "^3.2.1"
+  },
+  "devDependencies": {
+    "@types/body-parser": "^1.19.0",
+    "@types/csv-stringify": "^1.4.2",
+    "@types/errorhandler": "^1.5.0",
+    "@types/jest": "^23.3.9",
+    "@types/node": "^10.12.2",
+    "@types/shelljs": "^0.8.6",
+    "@types/supertest": "^2.0.8",
+    "@types/winston": "^2.4.4",
+    "@typescript-eslint/eslint-plugin": "^2.20.0",
+    "@typescript-eslint/parser": "^2.20.0",
+    "eslint": "^6.8.0",
+    "jest": "^25.1.0",
+    "shelljs": "^0.8.3",
+    "supertest": "^4.0.2",
+    "ts-jest": "^23.10.4",
+    "ts-node": "^7.0.1",
+    "typescript": "^3.1.6"
+  },
+  "typeRoots": [
+    "./@types",
+    "./node_modules/neo4j-driver/types/index.d.ts"
+  ],
+  "jest": {
+    "verbose": true,
+    "rootDir": "",
+    "transform": {
+      "^.+\\.(ts|js)x?$": "ts-jest"
+    },
+    "testEnvironment": "node",
+    "testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.(jsx?|tsx?)$",
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js",
+      "jsx",
+      "json",
+      "node"
+    ],
+    "testPathIgnorePatterns": [
+      "/node_modules/",
+      "/testcafe/",
+      "/stories/",
+      "/build/"
+    ],
+    "collectCoverageFrom": [
+      "**/*.{js,jsx,ts,tsx}"
+    ],
+    "coveragePathIgnorePatterns": [
+      "/coverage/",
+      "/dist/",
+      "/tests/",
+      "/build/",
+      "/stories/",
+      "/testcafe/"
+    ]
+  }
+}

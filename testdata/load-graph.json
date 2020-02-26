@@ -1,0 +1,76 @@
+[
+  {
+    "id": "family",
+    "labels": [
+      "Why"
+    ],
+    "title": "Family",
+    "vision": "I have healthy and strong two way loving relationship with my partner and children",
+    "mission": "To spend time with my family and on family relationships"
+  },
+  {
+    "id": "friends",
+    "labels": [
+      "Why"
+    ],
+    "title": "Friends",
+    "vision": "I have healthy and meaningful relationship with my friends",
+    "mission": "To build strong relationships with my friends"
+  },
+  {
+    "id": "finances",
+    "labels": [
+      "Why"
+    ],
+    "title": "Finances",
+    "vision": "To have enough wealth to reduce time on work and spend more time on people and relationships",
+    "mission": "To build wealth"
+  },
+  {
+    "id": "health",
+    "labels": [
+      "Why"
+    ],
+    "title": "Health",
+    "vision": "To be healthy enough to enjoy life and live long for my family and see my children grow up",
+    "mission": "To look after my body with exercise and healthy eating"
+  },
+  {
+    "id": "investment",
+    "labels": [
+      "Goal"
+    ],
+    "title": "Investment",
+    "vision": "Invested in Stocks and Funds to generate future wealth",
+    "mission": "Actively invest and re-balance portfolio on regular basis",
+    "confidence": 2,
+    "impact": 5,
+    "dependencies": 1,
+    "effort": 5,
+    "reach": 5,
+    "links": [
+      {
+        "id": "finances"
+      }
+    ]
+  },
+  {
+    "id": "investmentResearch",
+    "labels": [
+      "Habit"
+    ],
+    "title": "Investment Research",
+    "vision": "Confidence to chose stocks and funds to invest in",
+    "mission": "To research stocks and funds for potential investment",
+    "confidence": 2,
+    "impact": 5,
+    "dependencies": 1,
+    "effort": 5,
+    "reach": 5,
+    "links": [
+      {
+        "id": "investment"
+      }
+    ]
+  }
+]
