@@ -1,4 +1,6 @@
 "use strict";
+import dotenv from "dotenv";
+dotenv.config();
 import logger from "../util/logger";
 import fs from "fs";
 import {readCsv} from "../util/csv-utils";

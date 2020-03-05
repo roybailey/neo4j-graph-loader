@@ -29,7 +29,7 @@ export function neo4jNodeProperties(node: any, includes: string[] = [], excludes
 
 
 export function neo4jNode2Cypher(data: Node[]): string {
-    logger.debug("Converting\n" + data);
+    logger.debug("neo4jNode2Cypher\n" + JSON.stringify(data));
     const cypher: string[] = [];
 
     data.map(node => {

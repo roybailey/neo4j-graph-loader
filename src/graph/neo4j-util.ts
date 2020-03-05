@@ -1,14 +1,16 @@
 "use strict";
 import {QueryResult} from "neo4j-driver";
 import neo4j from "neo4j-driver";
+import logger from "../util/logger";
 
-
-// TODO replace hard-coded values for Neo4j with environment variables
-const driver = neo4j.driver("bolt://localhost:7687", neo4j.auth.basic("neo4j", "localhost"));
+const neo4jUrl = (process.env.NEO4J_URL||"bolt://localhost:7687");
+const neo4jUsername = (process.env.NEO4J_USERNAME||"neo4j");
+const neo4jPassword = (process.env.NEO4J_PASSWORD||"neo4j");
+const driver = neo4j.driver(neo4jUrl, neo4j.auth.basic(neo4jUsername, neo4jPassword));
 
 
 export function neo4jShutdown() {
-    driver.close().then(() => console.log("Finished"));
+    driver.close().then(() => logger.debug("Finished"));
 }
 
 
@@ -19,32 +21,32 @@ export const COUNTHANDLER = (result: QueryResult) => {
     // On result, get count from first record
     const count = result.records[0].get("count");
     // Log response
-    console.log(`Graph now contains...${count} nodes`);
+    logger.debug(`Graph now contains...${count} nodes`);
     return Promise.resolve(count.toNumber());
 };
 
 
 export function runCypher(query: string, params: any, handler: (result: QueryResult) => any) {
     const session = driver.session();
-    console.log(query);
+    logger.debug(query);
     return session.run(query, params)
         .then((result: QueryResult) => {
             const passback = handler(result);
             return session.close().then(r => Promise.resolve(passback));
         })
         .catch((err: any) => {
-            console.log(err);
+            logger.error(err);
         });
 }
 
 
 export function clearGraph() {
-    console.log("clearGraph()");
+    logger.debug("clearGraph()");
     return runCypher("match (n) optional match (n)-[r]-() delete r,n", {}, NOHANDLER);
 }
 
 
 export function countGraph() {
-    console.log("countGraph()");
+    logger.debug("countGraph()");
     return runCypher("MATCH (n) RETURN count(n) as count", {}, COUNTHANDLER);
 }

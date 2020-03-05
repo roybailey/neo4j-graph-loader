@@ -1,5 +1,7 @@
-import errorHandler from "errorhandler";
+import dotenv from "dotenv";
+dotenv.config();
 
+import errorHandler from "errorhandler";
 import app from "./app";
 
 /**
