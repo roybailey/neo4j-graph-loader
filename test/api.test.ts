@@ -97,55 +97,55 @@ create (carl)-[:LINKED {  rating: "3" }]->(football)
 `;
 
 
-// describe( "POST /api/csv2json", () => {
-//     it("should convert csv into json graph", async () => {
-//         const res = await request(app)
-//             .post("/api/csv2json")
-//             .send(JSON.parse(jsonSample));
-//         expect(res.status).toEqual(200);
-//         expect(res.type).toEqual("application/json");
-//         console.log("----- expected -----");
-//         console.log(normalise(jsonSample));
-//         console.log("----- actual -----");
-//         console.log(normalise(res.text));
-//         console.log("-----");
-//         expect(normalise(res.text)).toEqual(normalise(jsonSample));
-//     });
-// });
-//
-//
-// describe( "POST /api/csv2cypher", () => {
-//     it("should convert csv into cypher", async () => {
-//         const res = await request(app)
-//             .post("/api/csv2cypher")
-//             .send(JSON.parse(jsonSample));
-//         expect(res.status).toEqual(200);
-//         expect(res.type).toEqual("text/plain");
-//         console.log("----- expected -----");
-//         console.log(normalise(cypherResponse));
-//         console.log("----- actual -----");
-//         console.log(normalise(res.text));
-//         console.log("-----");
-//         expect(normalise(res.text)).toEqual(normalise(cypherResponse));
-//     });
-// });
-//
-//
-// describe( "POST /api/json2cypher", () => {
-//     it("should convert json into cypher", async () => {
-//         const res = await request(app)
-//             .post("/api/json2cypher")
-//             .send(JSON.parse(jsonSample));
-//         expect(res.status).toEqual(200);
-//         expect(res.type).toEqual("text/plain");
-//         console.log("----- expected -----");
-//         console.log(normalise(cypherResponse));
-//         console.log("----- actual -----");
-//         console.log(normalise(res.text));
-//         console.log("-----");
-//         expect(normalise(res.text)).toEqual(normalise(cypherResponse));
-//     });
-// });
+describe( "POST /api/csv2json", () => {
+    it("should convert csv into json graph", async () => {
+        const res = await request(app)
+            .post("/api/csv2json")
+            .send(JSON.parse(jsonSample));
+        expect(res.status).toEqual(200);
+        expect(res.type).toEqual("application/json");
+        console.log("----- expected -----");
+        console.log(normalise(jsonSample));
+        console.log("----- actual -----");
+        console.log(normalise(res.text));
+        console.log("-----");
+        expect(normalise(res.text)).toEqual(normalise(jsonSample));
+    });
+});
+
+
+describe( "POST /api/csv2cypher", () => {
+    it("should convert csv into cypher", async () => {
+        const res = await request(app)
+            .post("/api/csv2cypher")
+            .send(JSON.parse(jsonSample));
+        expect(res.status).toEqual(200);
+        expect(res.type).toEqual("text/plain");
+        console.log("----- expected -----");
+        console.log(normalise(cypherResponse));
+        console.log("----- actual -----");
+        console.log(normalise(res.text));
+        console.log("-----");
+        expect(normalise(res.text)).toEqual(normalise(cypherResponse));
+    });
+});
+
+
+describe( "POST /api/json2cypher", () => {
+    it("should convert json into cypher", async () => {
+        const res = await request(app)
+            .post("/api/json2cypher")
+            .send(JSON.parse(jsonSample));
+        expect(res.status).toEqual(200);
+        expect(res.type).toEqual("text/plain");
+        console.log("----- expected -----");
+        console.log(normalise(cypherResponse));
+        console.log("----- actual -----");
+        console.log(normalise(res.text));
+        console.log("-----");
+        expect(normalise(res.text)).toEqual(normalise(cypherResponse));
+    });
+});
 
 
 describe( "POST /api/cypher2neo4j", () => {
