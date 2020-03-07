@@ -6,11 +6,25 @@ import {
 
 
 const dataCsv = `
-        id,labels,link,title
-        "the-matrix","MOVIE",,"The Matrix"
-        "keanu-reeves","ACTOR",,"Keanu Reeves"
-        "keanu-reeves","ACTED_IN","the-matrix"
-        `;
+id,labels,link,title
+the-matrix,MOVIE,,The Matrix
+keanu-reeves,ACTOR,,Keanu Reeves
+keanu-reeves,ACTED_IN,the-matrix,
+`;
+
+const dataJson: any[] = [
+    {
+        id: "the-matrix", labels: ["MOVIE"], links: [], title: "The Matrix"
+    },
+    {
+        id: "keanu-reeves", labels: ["ACTOR"], title: "Keanu Reeves",
+        links: [
+            {
+                labels: ["ACTED_IN"], linked: "the-matrix"
+            }
+        ]
+    }
+];
 
 const dataRecords: any[] = [];
 dataRecords.push({id: "the-matrix", labels: ["MOVIE"], title: "The Matrix"});
@@ -27,9 +41,8 @@ create (keanu-reeves)-[:ACTED_IN {  }]->(the-matrix)
 
 describe("neo4jJson2Cypher", () => {
     it("should return cypher", () => {
-        const data = [{id: "the-matrix", labels: [], links: [], title: "The Matrix"}];
-        expect(neo4jNode2Cypher(data))
-            .toBe(expectedCypher);
+        expect(neo4jNode2Cypher(dataJson))
+            .toEqual(expectedCypher);
     });
 });
 
@@ -45,7 +58,7 @@ describe("neo4jCsv2Record", () => {
 describe("neo4jRecord2Cypher", () => {
     it("should return cypher", () => {
         expect(neo4jRecord2Cypher(dataRecords))
-            .toBe(expectedCypher);
+            .toEqual(expectedCypher);
     });
 });
 

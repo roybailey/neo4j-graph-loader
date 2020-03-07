@@ -1,9 +1,11 @@
 "use strict";
 import logger from "../util/logger";
+import parse from "csv-parse/lib/sync";
 
 
-export interface Link {
+export interface NodeLink {
     id: string;
+    labels: string[];
     linked: string;
 }
 
@@ -11,7 +13,7 @@ export interface Link {
 export interface Node {
     id: string;
     labels: string[];
-    links: Link[];
+    links: NodeLink[];
 }
 
 
@@ -22,10 +24,22 @@ export interface GraphRecord {
 }
 
 
+export function neo4jCopyProperties(node: any, target: any, includes: string[] = [], excludes: string[] = ["id", "labels", "links", "link", "linked"]): string {
+    const isIncluded = (prop: string) => includes.length == 0 || includes.findIndex(it => it == prop) >= 0;
+    const isExcluded = (prop: string) => excludes.length != 0 && excludes.findIndex(it => it == prop) >= 0;
+    for (const prop in node) {
+        if (Object.prototype.hasOwnProperty.call(node, prop) && isIncluded(prop) && !isExcluded(prop)) {
+            target[prop] = node[prop];
+        }
+    }
+    return target;
+}
+
+
 export function neo4jNodeProperties(node: any, includes: string[] = [], excludes: string[] = ["id", "labels", "link", "linked"]): string {
     const props: string[] = [];
     const isIncluded = (prop: string) => includes.length == 0 || includes.findIndex(it => it == prop) >= 0;
-    const isExcluded = (prop: string) => excludes.length == 0 || excludes.findIndex(it => it == prop) >= 0;
+    const isExcluded = (prop: string) => excludes.length != 0 && excludes.findIndex(it => it == prop) >= 0;
     for (const prop in node) {
         if (Object.prototype.hasOwnProperty.call(node, prop) && isIncluded(prop) && !isExcluded(prop)) {
             props.push(` ${prop}: \"${node[prop]}\"`);
@@ -35,30 +49,33 @@ export function neo4jNodeProperties(node: any, includes: string[] = [], excludes
 }
 
 
-export function neo4jNode2Cypher(data: Node[]): string {
-    logger.debug("neo4jNode2Cypher\n" + JSON.stringify(data));
-    const cypher: string[] = [];
-
-    data.map(node => {
-        const labels: string = node.labels.join(":");
-        let query = `create (${node.id}:${labels} { ${neo4jNodeProperties(node)} })`;
-        cypher.push(query);
-        if (node.links && node.links.length > 0) {
-            node.links.map(link => {
-                query = `create (${node.id})-[:${labels} { ${neo4jNodeProperties(link)} }]->(${link.id})`;
-                cypher.push(query);
-            });
+export function cleanEmptyProperties(record: any) {
+    for (const prop in record) {
+        if (Object.prototype.hasOwnProperty.call(record, prop) && record[prop] == "") {
+            delete record[prop];
         }
-    });
-
-    const result = cypher.join("\r\n");
-    logger.debug("Cypher\n" + result);
-    return result;
+    }
+    return record;
 }
 
 
 export function neo4jCsv2Record(csv: string): GraphRecord[] {
-    return [];
+    console.log(`\n\n${csv}\n\n`);
+    const records: GraphRecord[] = parse(csv, {
+        // eslint-disable-next-line @typescript-eslint/camelcase
+        skip_empty_lines: true,
+        // eslint-disable-next-line @typescript-eslint/camelcase
+        relax_column_count: true,
+        columns: (header: string[]) => {
+            return header.map(name => name.toLowerCase());
+        }
+    });
+    return records
+        .map(it => {
+            it.labels = it.labels.toString().split(":");
+            return it;
+        })
+        .map(it => cleanEmptyProperties(it));
 }
 
 
@@ -68,7 +85,7 @@ export function neo4jRecord2Cypher(data: GraphRecord[]): string {
     let query = "";
 
     data.map(record => {
-        if(record.link) {
+        if (record.link) {
             query = `create (${record.id})-[:${record.labels.join(":")} { ${neo4jNodeProperties(record)} }]->(${record.link})`;
         } else {
             query = `create (${record.id}:${record.labels.join(":")} { ${neo4jNodeProperties(record)} })`;
@@ -80,3 +97,28 @@ export function neo4jRecord2Cypher(data: GraphRecord[]): string {
     logger.debug("Cypher\n" + result);
     return result;
 }
+
+
+export function neo4jNode2Cypher(data: Node[]): string {
+    logger.debug("neo4jNode2Cypher\n" + JSON.stringify(data));
+    const records: GraphRecord[] = [];
+    let record;
+
+    data.map(node => {
+        record = {id: node.id, labels: node.labels};
+        neo4jCopyProperties(node, record);
+        records.push(record);
+        if (node.links && node.links.length > 0) {
+            node.links.map(link => {
+                record = {id: node.id, labels: link.labels, link: link.linked};
+                neo4jCopyProperties(link, record);
+                records.push(record);
+            });
+        }
+    });
+
+    logger.debug("Records\n" + JSON.stringify(records, null, 2));
+    return neo4jRecord2Cypher(records);
+}
+
+
