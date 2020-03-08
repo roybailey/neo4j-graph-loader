@@ -1,4 +1,6 @@
 "use strict";
+import dotenv from "dotenv";
+dotenv.config();
 import logger from "../util/logger";
 import {neo4jNode2Cypher, Node} from "./neo4j-converter";
 import {clearGraph, countGraph, neo4jShutdown, NOHANDLER, runCypher} from "./neo4j-util";

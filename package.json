@@ -30,6 +30,7 @@
     "dotenv": "^8.2.0",
     "errorhandler": "^1.5.1",
     "express": "^4.17.1",
+    "express-promise-router": "^3.0.3",
     "minimist": "^1.2.0",
     "neo4j-driver": "^4.0.1",
     "winston": "^3.2.1"
@@ -38,6 +39,7 @@
     "@types/body-parser": "^1.19.0",
     "@types/csv-stringify": "^1.4.2",
     "@types/errorhandler": "^1.5.0",
+    "@types/express-promise-router": "^3.0.0",
     "@types/jest": "^23.3.9",
     "@types/node": "^10.12.2",
     "@types/shelljs": "^0.8.6",

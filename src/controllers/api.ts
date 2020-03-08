@@ -2,19 +2,21 @@
 
 import logger from "../util/logger";
 
-import {neo4jNode2Cypher} from "../graph/neo4j-converter";
+// import express from "express";
+import expressPromiseRouter from "express-promise-router";
 
-import express from "express";
+import {neo4jCsv2Cypher, neo4jCsv2Record, neo4jNode2Cypher} from "../graph/neo4j-converter";
+import {clearGraph, countGraph, NOHANDLER, runCypher} from "../graph/neo4j-util";
 
-const router = express.Router();
-
+// const router = express.Router();
+const router = expressPromiseRouter();
 
 /* GET ALL API */
 router.get("/", function (req, res, next) {
     res.json({
         "routes": [
             {"path": "/json2cypher"},
-            {"path": "/csv2json"},
+            {"path": "/csv2records"},
             {"path": "/csv2cypher"}
         ]
     });
@@ -28,15 +30,40 @@ router.post("/json2cypher", function (req, res, next) {
 });
 
 /* CONVERT CSV2JSON */
-router.post("/csv2json", function (req, res, next) {
+router.post("/csv2records", function (req, res, next) {
     logger.debug(req.body);
-    res.json({"example": "csv2json"});
+    res.json(neo4jCsv2Record(req.body));
 });
 
 /* CONVERT CSV2CYPHER */
 router.post("/csv2cypher", function (req, res, next) {
     logger.debug(req.body);
-    res.send("create (csv2cypher)");
+    const cypher = neo4jCsv2Cypher(req.body);
+    res.setHeader("Content-Type", "text/plain");
+    res.send(cypher);
+});
+
+/* CONVERT CYPHER2NEO4J */
+router.post("/cypher2neo4j", async function (req, res, next) {
+    logger.debug("cypher2neo4j\n" + req.body);
+    await countGraph()
+        .then(() => clearGraph())
+        .then(() => countGraph())
+        .then(() => runCypher(req.body, {}, NOHANDLER))
+        .then(() => countGraph())
+        .then(count => {
+            res.status(200);
+            res.setHeader("Content-Type", "text/plain");
+            res.send(`${count}`);
+            next();
+        })
+        .catch((err: any) => {
+            logger.error(err);
+            res.status(400);
+            res.setHeader("Content-Type", "text/plain");
+            res.send(err.toString());
+            next(err);
+        });
 });
 
 export default router;
