@@ -1,6 +1,7 @@
 import request from "supertest";
 import app from "../src/app";
 import {dataCsvPack1, dataCypherPack1, dataJsonPack1} from "./datasets";
+import {neo4jShutdown} from "../src/graph/neo4j-util";
 
 
 describe("GET /api", () => {
@@ -61,5 +62,8 @@ describe( "POST /api/cypher2neo4j", () => {
         expect(res.status).toEqual(200);
         expect(res.type).toEqual("text/plain");
         expect(res.text).toEqual("2");
+        await neo4jShutdown();
     });
 });
+
+

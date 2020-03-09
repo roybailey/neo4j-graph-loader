@@ -3,14 +3,14 @@ import {QueryResult} from "neo4j-driver";
 import neo4j from "neo4j-driver";
 import logger from "../util/logger";
 
-const neo4jUrl = (process.env.NEO4J_URL||"bolt://localhost:7687");
-const neo4jUsername = (process.env.NEO4J_USERNAME||"neo4j");
-const neo4jPassword = (process.env.NEO4J_PASSWORD||"neo4j");
+const neo4jUrl = (process.env.NEO4J_URL || "bolt://localhost:7687");
+const neo4jUsername = (process.env.NEO4J_USERNAME || "neo4j");
+const neo4jPassword = (process.env.NEO4J_PASSWORD || "neo4j");
 const driver = neo4j.driver(neo4jUrl, neo4j.auth.basic(neo4jUsername, neo4jPassword));
+logger.debug(`Neo4j ${neo4jUrl} Starting`);
 
-
-export function neo4jShutdown() {
-    driver.close().then(() => logger.debug("Finished"));
+export async function neo4jShutdown() {
+    return driver.close().then(() => logger.debug(`Neo4j ${neo4jUrl} Shutdown`));
 }
 
 
@@ -27,16 +27,19 @@ export const COUNTHANDLER = (result: QueryResult) => {
 
 
 export function runCypher(query: string, params: any, handler: (result: QueryResult) => any) {
+    // let result: any;
     const session = driver.session();
     logger.debug(query);
     return session.run(query, params)
         .then((result: QueryResult) => {
             const passback = handler(result);
-            return session.close().then(r => Promise.resolve(passback));
+            return passback;
         })
         .catch((err: any) => {
             logger.error(err);
-        });
+        })
+        .then((result) =>{ session.close(); return result; })
+        .then((result) => Promise.resolve(result));
 }
 
 
