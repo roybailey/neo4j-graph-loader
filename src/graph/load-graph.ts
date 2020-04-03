@@ -6,7 +6,7 @@ import {neo4jNode2Cypher, Node} from "./neo4j-converter";
 import {clearGraph, countGraph, neo4jShutdown, NOHANDLER, runCypher} from "./neo4j-util";
 import fs from "fs";
 
-// print process.argv
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 process.argv.forEach(function (val, index, array) {
     console.log(index + ": " + val);
 });

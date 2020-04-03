@@ -14,6 +14,7 @@ export async function neo4jShutdown() {
 }
 
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const NOHANDLER = (result: QueryResult) => Promise.resolve();
 
 

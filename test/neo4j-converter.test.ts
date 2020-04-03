@@ -6,7 +6,7 @@ import {
     neo4jRecord2Cypher
 } from "../src/graph/neo4j-converter";
 
-import {dataCsvPack1, dataCypherPack1, dataJsonPack1, dataRecordsPack1} from './datasets';
+import {dataCsvPack1, dataCypherPack1, dataJsonPack1, dataRecordsPack1} from "./datasets";
 
 
 describe("neo4jRecord2Cypher", () => {

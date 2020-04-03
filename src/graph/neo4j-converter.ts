@@ -85,7 +85,7 @@ export function neo4jRecord2Cypher(data: GraphRecord[]): string {
 
 
 export function neo4jCsv2Record(csv: string): GraphRecord[] {
-    //logger.debug(`\n\n${csv}\n\n`);
+    logger.debug(`\n\n${csv}\n\n`);
     const records: GraphRecord[] = parse(csv, {
         // eslint-disable-next-line @typescript-eslint/camelcase
         skip_empty_lines: true,

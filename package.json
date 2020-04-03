@@ -4,7 +4,7 @@
   "description": "Server to convert generic graph in JSON or CSV format into Cypher create script",
   "main": "server.js",
   "scripts": {
-    "docker": "docker build -t roybaileybiz/neo4j-graph-loader .",
+    "docker": "npm run build && docker build -t roybaileybiz/neo4j-graph-loader .",
     "build": "npm run build-ts && npm run lint",
     "build-ts": "tsc",
     "watch-ts": "tsc -w",
@@ -12,7 +12,7 @@
     "server": "node dist/server.js",
     "dev": "ts-node src/server.ts",
     "test": "npx jest",
-    "lint": "tsc --noEmit && eslint \"**/*.{js,ts}\" --quiet --fix",
+    "lint": "tsc --noEmit && eslint \"src/**/*.{js,ts}\"",
     "graph": "ts-node src/graph/graph.ts",
     "load-graph": "ts-node src/graph/load-graph.ts",
     "load-habits": "ts-node src/graph/load-habits.ts"
