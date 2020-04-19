@@ -17,7 +17,7 @@ app.use(bodyParser.text());
 
 app.set("port", process.env.PORT || 3000);
 
-app.get("/", (req, res) => res.send("Hello World!"));
+app.get("/", (req, res) => res.send("Hello World!  from neo4j-graph-loader v0.1.1"));
 
 // API examples routes
 app.use("/api", apiRouter);
